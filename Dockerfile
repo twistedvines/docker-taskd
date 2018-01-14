@@ -29,4 +29,4 @@ COPY ./scripts/create_keys_and_certs.bash /tmp/create_keys_and_certs.bash
 COPY ./scripts/entrypoint.bash /usr/local/bin/entrypoint
 RUN /tmp/create_keys_and_certs.bash
 VOLUME $TASKDDATA
-ENTRYPOINT /usr/local/bin/entrypoint
+ENTRYPOINT ["/usr/local/bin/entrypoint"]

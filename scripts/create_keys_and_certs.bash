@@ -7,10 +7,12 @@ PEM_FILES=(
   ca.cert
 )
 
-cd /usr/local/src/taskd/pki
+cd /home/taskd/pki
 ./generate
 
+mkdir -p "${TASKDDATA}/certs/"
+
 for file in ${PEM_FILES[@]}; do
-  cp "${file}.pem" "${TASKDDATA}"
-  taskd config --force "${file}" "${TASKDDATA}/${file}.pem"
+  cp "${file}.pem" "${TASKDDATA}/certs"
+  taskd config --force "${file}" "${TASKDDATA}/certs/${file}.pem"
 done

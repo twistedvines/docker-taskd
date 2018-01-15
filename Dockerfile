@@ -27,9 +27,10 @@ RUN chown -R taskd: /usr/local/src/taskd
 RUN mkdir $TASKDDATA && chown -R taskd: $TASKDDATA
 USER taskd
 RUN taskd init --data $TASKDDATA
-COPY ./scripts/create_keys_and_certs.bash /tmp/create_keys_and_certs.bash
+COPY ./scripts/create_keys_and_certs.bash /usr/local/bin/create_keys_and_certs
 COPY ./scripts/entrypoint.bash /usr/local/bin/entrypoint
 COPY ./scripts/add_user.bash /usr/local/bin/add_user
-RUN /tmp/create_keys_and_certs.bash
+COPY ./scripts/add_org.bash /usr/local/bin/add_org
 VOLUME $TASKDDATA
+VOLUME /home/taskd/pki
 ENTRYPOINT ["/usr/local/bin/entrypoint"]

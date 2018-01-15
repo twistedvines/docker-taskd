@@ -3,7 +3,7 @@
 HOSTNAME="${HOSTNAME:-0.0.0.0}"
 PORT="${PORT:-53589}"
 
-cp -f "${TASKDDATA}/certs/*" /home/taskd/pki
+/usr/local/bin/create_keys_and_certs
 
 taskd config --force server "${HOSTNAME}:${PORT}"
 taskd $@

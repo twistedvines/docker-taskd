@@ -1,5 +1,26 @@
 #!/bin/bash
 
+get_opts() {
+  while getopts 'r' opt; do
+    case "$opt" in
+      r)
+        FORCE_REGENERATE=true
+        ;;
+    esac
+  done
+}
+
+get_opts $@
+
+if [ -f "${HOME}/pki/server.cert.pem" ]; then
+  if [ -z "$FORCE_REGENERATE" ]; then
+    echo "Certs already generated: use '-r' to force regen"
+    exit 0
+  else
+    rm -f "${HOME}/pki/*.pem"
+  fi
+fi
+
 PEM_FILES=(
   server.cert
   server.key
@@ -7,12 +28,10 @@ PEM_FILES=(
   ca.cert
 )
 
-cd /home/taskd/pki
-./generate
+result="$(cd /home/taskd/pki && ./generate)"
 
 mkdir -p "${TASKDDATA}/certs/"
 
 for file in ${PEM_FILES[@]}; do
-  cp "${file}.pem" "${TASKDDATA}/certs"
-  taskd config --force "${file}" "${TASKDDATA}/certs/${file}.pem"
+  taskd config --force "${file}" "${HOME}/pki/$file.pem"
 done

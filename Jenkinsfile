@@ -16,6 +16,7 @@ pipeline {
     }
     stage('Push') {
       steps {
+        sh 'docker login -u $DOCKER_USER -p $DOCKER_PASSWORD'
         sh 'make push'
       }
     }
